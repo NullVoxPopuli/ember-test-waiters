@@ -20,16 +20,16 @@ if (!DEBUG) {
     });
 
     test('register will correctly add a waiter', function(assert) {
-      let waiter = buildWaiter('@ember/test-waiters:first');
+      let waiter = buildWaiter('ember-test-waiters:first');
 
       register(waiter);
 
       let waiters = getWaiters().map(w => w.name);
-      assert.deepEqual(waiters, ['@ember/test-waiters:first']);
+      assert.deepEqual(waiters, ['ember-test-waiters:first']);
     });
 
     test('a NoopTestWaiter always returns true from waitUntil', function(assert) {
-      let waiter = buildWaiter('@ember/test-waiters:first');
+      let waiter = buildWaiter('ember-test-waiters:first');
 
       assert.ok(waiter.waitUntil(), 'waitUntil returns true');
       let token = waiter.beginAsync();
@@ -39,7 +39,7 @@ if (!DEBUG) {
     });
 
     test('a NoopTestWaiter always returns true from waitUntil', function(assert) {
-      let waiter = buildWaiter('@ember/test-waiters:first');
+      let waiter = buildWaiter('ember-test-waiters:first');
       let waiterItem = {};
 
       assert.ok(waiter.waitUntil(), 'waitUntil returns true');

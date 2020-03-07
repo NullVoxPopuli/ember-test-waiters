@@ -3,6 +3,7 @@ import { Primitive, TestWaiter, TestWaiterDebugInfo, WaiterName } from 'ember-te
 import { DEBUG } from '@glimmer/env';
 import Token from './token';
 import { register } from './waiter-manager';
+import { warn } from '@ember/debug';
 
 const WAITER_NAME_PATTERN = /^[^:]*:.*/;
 
@@ -140,15 +141,15 @@ export default function buildWaiter(name: string): TestWaiter {
     return new NoopTestWaiter(name);
   }
 
-  if (!WAITER_NAME_PATTERN.test(name)) {
-    throw new Error(
-      `You must provide a name that contains a descriptive prefix separated by a colon.
+  warn(
+    `You must provide a name that contains a descriptive prefix separated by a colon.
 
-       Example: ember-fictitious-addon:some-file
+      Example: ember-fictitious-addon:some-file
 
-       You passed: ${name}`
-    );
-  }
+      You passed: ${name}`,
+    WAITER_NAME_PATTERN.test(name),
+    { id: 'ember-test-waiters.invalid-waiter-name' }
+  );
 
   return new TestWaiterImpl(name);
 }

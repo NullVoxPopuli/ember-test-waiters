@@ -2,7 +2,7 @@ import { DEBUG } from '@glimmer/env';
 import { Promise } from 'rsvp';
 import buildWaiter from './build-waiter';
 
-const PROMISE_WAITER = buildWaiter('@ember/test-waiters:promise-waiter');
+const PROMISE_WAITER = buildWaiter('ember-test-waiters:promise-waiter');
 
 /**
  * A convenient utility function to simplify waiting for a promise.
