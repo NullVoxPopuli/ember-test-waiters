@@ -12,14 +12,20 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiter can be instantiated with a name', function(assert) {
-    let name = 'my-waiter';
+    let name = 'my-addon:my-waiter';
     let waiter = buildWaiter(name);
 
     assert.equal(waiter.name, name);
   });
 
+  test('test waiter throws if an incorrect pattern was passed for name', function(assert) {
+    assert.throws(() => {
+      buildWaiter('my-waiter');
+    });
+  });
+
   test('test waiters return a token from beginAsync when no token provided', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('my-addon:my-waiter');
 
     let token = waiter.beginAsync();
 
@@ -27,7 +33,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiters return a truthy token from beginAsync when no token provided', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('my-addon:my-waiter');
 
     let token = waiter.beginAsync();
 
@@ -35,7 +41,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiters automatically register when beginAsync is invoked when no token provided', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('my-addon:my-waiter');
 
     let token = waiter.beginAsync();
 
@@ -50,7 +56,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiters automatically register when beginAsync is invoked using a custom token', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     waiter.beginAsync(waiterItem);
@@ -66,7 +72,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiters removes item from items map when endAsync is invoked', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
 
     let token = waiter.beginAsync();
     waiter.endAsync(token);
@@ -76,7 +82,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('test waiters removes item from items map when endAsync is invoked using a custom token', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     waiter.beginAsync(waiterItem);
@@ -87,7 +93,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('beginAsync will throw if a prior call to beginAsync with the same token occurred', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
 
     assert.throws(
       () => {
@@ -100,7 +106,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('beginAsync will throw if a prior call to beginAsync with the same token occurred', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let token = {};
 
     assert.throws(
@@ -114,7 +120,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('endAsync will throw if a prior call to beginAsync with the same token did not occur', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let token = 0;
 
     assert.throws(
@@ -127,7 +133,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('endAsync will throw if a prior call to beginAsync with the same token did not occur using custom token', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     assert.throws(
@@ -142,7 +148,7 @@ module('test-waiter', function(hooks) {
   test('endAsync will not throw if endAsync called twice in a row with the same token', function(assert) {
     assert.expect(0);
 
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let token = waiter.beginAsync();
 
     waiter.endAsync(token);
@@ -152,7 +158,7 @@ module('test-waiter', function(hooks) {
   test('endAsync will not throw if endAsync called twice in a row with the same token using custom token', function(assert) {
     assert.expect(0);
 
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     waiter.beginAsync(waiterItem);
@@ -161,7 +167,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('waitUntil returns the correct value if the waiter should wait', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     assert.ok(waiter.waitUntil(), 'waitUntil returns true');
@@ -176,7 +182,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('waiter contains debug info for a waiter item', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
     let waiterItem = {};
 
     overrideError(MockStableError);
@@ -187,7 +193,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('waiter executes beginAsync and endAsync at the correct times in relation to thenables', async function(assert) {
-    const promiseWaiter = buildWaiter('promise-waiter');
+    const promiseWaiter = buildWaiter('@ember/test-waiters:promise-waiter');
     function waitForPromise<T>(promise: Promise<T>, label?: string) {
       let result = promise;
 
@@ -221,7 +227,7 @@ module('test-waiter', function(hooks) {
     assert.deepEqual(getPendingWaiterState(), {
       pending: 1,
       waiters: {
-        'promise-waiter': [
+        '@ember/test-waiters:promise-waiter': [
           {
             label: undefined,
             stack: 'STACK',
@@ -249,7 +255,7 @@ module('test-waiter', function(hooks) {
   });
 
   test('waiter can clear items', function(assert) {
-    let waiter = buildWaiter('my-waiter');
+    let waiter = buildWaiter('@ember/test-waiters:my-waiter');
 
     waiter.beginAsync();
 

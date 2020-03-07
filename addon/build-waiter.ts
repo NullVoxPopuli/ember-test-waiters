@@ -4,6 +4,8 @@ import { DEBUG } from '@glimmer/env';
 import Token from './token';
 import { register } from './waiter-manager';
 
+const WAITER_NAME_PATTERN = /^[^:]*:.*/;
+
 function getNextToken(): Token {
   return new Token();
 }
@@ -134,8 +136,19 @@ class NoopTestWaiter implements TestWaiter {
  * }
  */
 export default function buildWaiter(name: string): TestWaiter {
-  if (DEBUG) {
-    return new TestWaiterImpl(name);
+  if (!DEBUG) {
+    return new NoopTestWaiter(name);
   }
-  return new NoopTestWaiter(name);
+
+  if (!WAITER_NAME_PATTERN.test(name)) {
+    throw new Error(
+      `You must provide a name that contains a descriptive prefix separated by a colon.
+
+       Example: ember-fictitious-addon:some-file
+
+       You passed: ${name}`
+    );
+  }
+
+  return new TestWaiterImpl(name);
 }
