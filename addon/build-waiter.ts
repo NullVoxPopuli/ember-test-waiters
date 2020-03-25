@@ -5,7 +5,7 @@ import Token from './token';
 import { register } from './waiter-manager';
 import { warn } from '@ember/debug';
 
-const WAITER_NAME_PATTERN = /^[^:]*:.*/;
+const WAITER_NAME_PATTERN = /^[^:]*:?.*/;
 let WAITER_NAMES = DEBUG ? new Set() : undefined;
 
 export function _resetWaiterNames() {

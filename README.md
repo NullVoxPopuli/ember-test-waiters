@@ -62,17 +62,17 @@ async operation as complete, call `endAsync`, passing in the `token` that was re
 
 #### Waiter naming conventions
 
-When building your waiter, you should ensure you use a meaningful name. At a minimum, your name needs to be constructed of a `namespace`, and a `descriptor` in the format `namespace:descriptor`. Suggestions for naming conventions are as follows:
+When building your waiter, you should ensure you use a meaningful name. At a minimum, your name needs to be constructed of a `namespace`, and optionally a `descriptor` in the format `namespace[:descriptor]`. Suggestions for naming conventions are as follows:
 
 For apps:
 
-1. `file-name` - if your file has only one waiter
-1. `file-name:waiter-1`, `file-name:waiter-2`, ... - if your file has more than one waiter
+1. `file-name` - if your file has only one waiter, the file name becomes the namespace
+1. `file-name:waiter-1`, `file-name:waiter-2`, ... - if your file has more than one waiter, the file name becomes the namespace and we add descriptors
 
 For addons:
 
-1. `addon-name` - if your addon has only one waiter
-1. `addon-name:waiter-1`, `addon-name:waiter-2`, ... - if your addon has more than one waiter
+1. `addon-name` - if your addon has only one waiter, the addon name becomes the namespace
+1. `addon-name:waiter-1`, `addon-name:waiter-2`, ... - if your addon has more than one waiter, the addon name becomes the namespace and we add descriptors
 
 ```js
 import Component from '@ember/component';

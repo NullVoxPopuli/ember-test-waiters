@@ -20,7 +20,14 @@ module('build-waiter', function(hooks) {
     registerWarnHandler(() => {});
   });
 
-  test('test waiter can be instantiated with a name', function(assert) {
+  test('test waiter can be instantiated with a namespace only', function(assert) {
+    let name = 'my-addon';
+    let waiter = buildWaiter(name);
+
+    assert.equal(waiter.name, name);
+  });
+
+  test('test waiter can be instantiated with a namespace and descriptor', function(assert) {
     let name = 'my-addon:my-waiter';
     let waiter = buildWaiter(name);
 
