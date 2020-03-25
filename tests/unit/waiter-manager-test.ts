@@ -3,6 +3,7 @@ import { TestWaiterDebugInfo, Waiter, WaiterName } from 'ember-test-waiters/type
 import {
   Token,
   _reset,
+  _resetWaiterNames,
   buildWaiter,
   getPendingWaiterState,
   getWaiters,
@@ -13,12 +14,16 @@ import {
 import { module, test } from 'qunit';
 
 import { DEBUG } from '@glimmer/env';
+import { registerWarnHandler } from '@ember/debug';
 
 if (DEBUG) {
-  module('test-waiters | DEBUG: true', function(hooks) {
+  module('waiter-manager | DEBUG: true', function(hooks) {
     hooks.afterEach(function() {
       _reset();
+      _resetWaiterNames();
       resetError();
+
+      registerWarnHandler(() => {});
     });
 
     test('register will correctly add a waiter', function(assert) {

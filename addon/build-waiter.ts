@@ -6,6 +6,11 @@ import { register } from './waiter-manager';
 import { warn } from '@ember/debug';
 
 const WAITER_NAME_PATTERN = /^[^:]*:.*/;
+let WAITER_NAMES = DEBUG ? new Set() : undefined;
+
+export function _resetWaiterNames() {
+  WAITER_NAMES = new Set();
+}
 
 function getNextToken(): Token {
   return new Token();
@@ -137,6 +142,13 @@ class NoopTestWaiter implements TestWaiter {
  * }
  */
 export default function buildWaiter(name: string): TestWaiter {
+  if (DEBUG) {
+    warn(`The waiter name '${name}' is already in use`, !WAITER_NAMES!.has(name), {
+      id: 'ember-test-waiters.duplicate-waiter-name',
+    });
+    WAITER_NAMES!.add(name);
+  }
+
   if (!DEBUG) {
     return new NoopTestWaiter(name);
   }

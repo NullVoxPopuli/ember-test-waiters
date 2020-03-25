@@ -4,7 +4,7 @@ import { module, test } from 'qunit';
 import { DEBUG } from '@glimmer/env';
 
 if (!DEBUG) {
-  module('test-waiter | DEBUG: false', function(hooks) {
+  module('waiter-manager-noop | DEBUG: false', function(hooks) {
     hooks.afterEach(function() {
       _reset();
     });

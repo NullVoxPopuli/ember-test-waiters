@@ -1,14 +1,23 @@
 import MockStableError, { overrideError, resetError } from './utils/mock-stable-error';
-import { _reset, buildWaiter, getPendingWaiterState, getWaiters } from 'ember-test-waiters';
+import {
+  _reset,
+  _resetWaiterNames,
+  buildWaiter,
+  getPendingWaiterState,
+  getWaiters,
+} from 'ember-test-waiters';
 import { module, test } from 'qunit';
 
 import { Promise } from 'rsvp';
 import Token from 'ember-test-waiters/token';
+import { registerWarnHandler } from '@ember/debug';
 
-module('test-waiter', function(hooks) {
+module('build-waiter', function(hooks) {
   hooks.afterEach(function() {
     _reset();
+    _resetWaiterNames();
     resetError();
+    registerWarnHandler(() => {});
   });
 
   test('test waiter can be instantiated with a name', function(assert) {
@@ -16,6 +25,17 @@ module('test-waiter', function(hooks) {
     let waiter = buildWaiter(name);
 
     assert.equal(waiter.name, name);
+  });
+
+  test('test waiters will warn when waiter name is used more than once', function(assert) {
+    registerWarnHandler((message, options) => {
+      console.log('message', message);
+      assert.equal(message, "The waiter name 'ember-test-waiters:first' is already in use");
+      assert.equal(options.id, 'ember-test-waiters.duplicate-waiter-name');
+    });
+
+    buildWaiter('ember-test-waiters:first');
+    buildWaiter('ember-test-waiters:first');
   });
 
   test('test waiters return a token from beginAsync when no token provided', function(assert) {
